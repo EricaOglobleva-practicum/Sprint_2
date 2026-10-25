@@ -1,0 +1,52 @@
+# Я хотела сделать переменную points глобальной и присвоить ей значение 0, чтобы она была видна всем классам и функциям в них
+# В таком случае я убирала return в if/elif, расчеты проводила в else и делала return points
+# Так в старом коде у меня получался точно такой же результат, как и в текущем, но когда меняла параметры в вызовах методов для проверки, ран крашился с ошибкой UnboundLocalError
+# ИИ подсказал, что в старом когде игнорировалась глобальная переменная, так как код пытался создать переменную как локальную для всей функции. При этом не доходил до расчетов в elif, если какое то из условий функции выполнялось
+# И вот на моменте return в старом коде переменной ничего не присваивалось, поэтому в новой версии я не стала делать ее глобальной, а решила возвращать в каждом условии функции
+class PointsForPlace:
+    @staticmethod  # Сделала статический метод, так как здесь не нужны атрибуты и можно просто передать данные в аргументах и посчитать 
+    def get_points_for_place(place):
+        if place > 100:
+            print('Баллы начисляются только первым 100 участникам')
+            return 0
+        elif place < 1:
+            print('Спортсмен не может занять нулевое или отрицательное место')
+            return 0
+        else:
+            return 101 - place
+        
+
+class PointsForMeters:
+    @staticmethod # Аналогично
+    def get_points_for_meters(meters):
+        if meters < 0:
+            print('Количество метров не может быть отрицательным')
+            return 0
+        else:
+            return meters * 0.5
+        
+
+class TotalPoints(PointsForPlace, PointsForMeters):
+    def get_total_points(self, meters, place):
+        total = PointsForPlace.get_points_for_place(place) + PointsForMeters.get_points_for_meters(meters)
+        return total
+
+
+points_for_place = PointsForPlace()
+print(points_for_place.get_points_for_place(10))
+
+points_for_meters = PointsForMeters()
+print(points_for_meters.get_points_for_meters(10))
+
+total_points = TotalPoints()
+print(total_points.get_points_for_place(10))
+print(total_points.get_points_for_meters(10))
+print(total_points.get_total_points(100, 10))
+
+
+
+    
+
+
+
+
